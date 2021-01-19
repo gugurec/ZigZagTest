@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private const float Speed = 2f;
+
+    private Vector3 _v;
+    private bool _isStartMove = true;
+    private Transform m_transform;
+
     void Start()
     {
-        
+        _v = Vector3.zero;
+        m_transform = GetComponent<Transform>();
+        if (m_transform == null)
+            Debug.LogError("Transform not found GameObject: " + GetComponent<GameObject>().name);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (_isStartMove)
+        {
+            _v = m_transform.position;
+            if (Input.GetMouseButton(0))
+                _v.z = _v.z + Time.deltaTime * Speed;
+            else
+                _v.x = _v.x + Time.deltaTime * Speed;
+            m_transform.position = _v;
+        }
     }
 }
