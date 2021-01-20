@@ -6,28 +6,27 @@ public class CharacterBehaviour : MonoBehaviour
 {
     private const float Speed = 2f;
 
-    private Vector3 _v;
+    private Vector3 _v = Vector3.zero;
     private bool _isStartMove = true;
-    private Transform m_transform;
 
-    void Start()
+    public int GetCurrentMaxTileCoords()
     {
-        _v = Vector3.zero;
-        m_transform = GetComponent<Transform>();
-        if (m_transform == null)
-            Debug.LogError("Transform not found GameObject: " + GetComponent<GameObject>().name);
+        if (transform.position.z > transform.position.x)
+            return Mathf.RoundToInt(transform.position.z);
+        else
+            return Mathf.RoundToInt(transform.position.x);
     }
 
     void Update()
     {
         if (_isStartMove)
         {
-            _v = m_transform.position;
+            _v = transform.position;
             if (Input.GetMouseButton(0))
                 _v.z = _v.z + Time.deltaTime * Speed;
             else
                 _v.x = _v.x + Time.deltaTime * Speed;
-            m_transform.position = _v;
+            transform.position = _v;
         }
     }
 }
