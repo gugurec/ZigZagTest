@@ -23,6 +23,13 @@ public class GamemanagerBehaviour : MonoBehaviour
         Easy = 3
     }
 
+    public enum CrystalGenerationRule
+    {
+        None = 0,
+        Random = 1,
+        Period = 2
+    }
+
     [SerializeField]
     private float Speed = 2.0f;
     [SerializeField]
@@ -34,6 +41,12 @@ public class GamemanagerBehaviour : MonoBehaviour
     [SerializeField]
     private Difficulty difficulty = Difficulty.Hard;
     [SerializeField]
+    private CrystalGenerationRule crystalGenerationRule = CrystalGenerationRule.Random;
+    [SerializeField]
+    private int CrystalPeriod = 5;//(Периодичность появления кристалов) ToDo: сделтаь чтобы поле появлялось в редакторе только при выборе crystalGenerationRule = CrystalGenerationRule.Period 
+    [SerializeField]
+    private int CristalSpawnСhance = 10;//(процент шанса появления кристала)  ToDo: сделтаь чтобы поле появлялось в редакторе только при выборе crystalGenerationRule = CrystalGenerationRule.Random 
+    [SerializeField]
     private GameObject Map;//Ссылка на ГО карты.
     [SerializeField]
     private GameObject Tile;//Тайлик из которого сторим дорогу для героя
@@ -44,9 +57,10 @@ public class GamemanagerBehaviour : MonoBehaviour
     private static List<GameObject> _tiles = new List<GameObject>();//массив всех тайлов в игре
     private CharacterBehaviour _character;
     private Vector3Int _currentTileEndPos = Vector3Int.zero;
+    private int _crystalRandomFacttor = 0;//параметр нужный чтобы кристал генерировался каждый 
 
     #region Public Metods
-    public void CreateStartPlatform()// стартовое поле StartFieldSize х StartFieldSize
+    public void CreateStartPlatform()// стартовое поле StartFieldSize х StartFieldSize CrystalPeriod раз
     {
         for(int i = 0; i < StartFieldSize; i++)
             for(int j = 0; j < StartFieldSize; j++)
@@ -116,11 +130,13 @@ public class GamemanagerBehaviour : MonoBehaviour
         {
             disabledTile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
             disabledTile.SetActive(true);
+            RandomizeSpawnCrystalOnTile(disabledTile.GetComponent<TileBehaviour>());
         }
         else
         {
             var tile = Instantiate(Tile, Map.transform);
             tile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
+            RandomizeSpawnCrystalOnTile(tile.GetComponent<TileBehaviour>());
             _tiles.Add(tile);
         }
 
@@ -129,6 +145,39 @@ public class GamemanagerBehaviour : MonoBehaviour
     #endregion
 
     #region Private Metods
+    private void RandomizeSpawnCrystalOnTile(TileBehaviour tile)
+    {
+        switch (crystalGenerationRule)
+        {
+            case CrystalGenerationRule.Random:
+                {
+                    int rnd = Random.Range(0, 101);
+                    if (rnd <= CristalSpawnСhance)
+                        tile.SetCrystalActive(true);
+                    else
+                        tile.SetCrystalActive(false);
+                    break;
+                }
+            case CrystalGenerationRule.Period:
+                {
+                    if (_crystalRandomFacttor == 0)
+                    {
+                        tile.SetCrystalActive(true);
+                        _crystalRandomFacttor = CrystalPeriod;
+                    }
+                    else
+                    {
+                        _crystalRandomFacttor--;
+                        tile.SetCrystalActive(false);
+                    }
+                    break;
+                }
+            case CrystalGenerationRule.None:
+                {
+                    break;
+                }
+        }
+    }
     private void DeactivFarTiles()
     {
         foreach (var e in _tiles)

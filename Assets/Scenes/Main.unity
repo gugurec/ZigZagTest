@@ -285,6 +285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d5935ad170e9b48b7a144111ecc867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 2
+  DistanceTileGenerationForward: 10
+  DistanceTileGenerationBack: 3
+  StartFieldSize: 3
+  difficulty: 1
   Map: {fileID: 1757531508}
   Tile: {fileID: 9191418101572381911, guid: 167dfd4ebeff6124b8a2c5a12245d71f, type: 3}
   Character: {fileID: 2101706670198848614, guid: 7a20d400773aa234eae8ff73f5a4513d,

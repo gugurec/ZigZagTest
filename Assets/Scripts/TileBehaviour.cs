@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class TileBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private GameObject _crystal;
+    [SerializeField]
+    private BoxCollider _collider;
+    
+    public BoxCollider GetCollider()
     {
-        
+        return _collider;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SetCrystalActive(bool activ)
     {
-        
+        _crystal.SetActive(activ);
     }
 }
