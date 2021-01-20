@@ -29,4 +29,21 @@ public class CharacterBehaviour : MonoBehaviour
             transform.position = _v;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var tile = other.gameObject.GetComponent<TileBehaviour>();
+        if (tile.isMyCrystalCollider(other))
+            tile.PickUpCrystal();
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        var tile = other.gameObject.GetComponent<TileBehaviour>();
+        if (!tile.isMyCrystalCollider(other))//вышли из коллайдера тайла, нужно проверить если ли под нами другой коллайдер
+        {
+            RaycastHit info;
+            if(!Physics.Raycast(new Ray(transform.position, Vector3.down), out info, 100))//коллайдера нет, шарик упал
+                GamemanagerBehaviour.Instance.GameOver();
+        }
+    }
 }

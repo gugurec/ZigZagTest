@@ -60,11 +60,17 @@ public class GamemanagerBehaviour : MonoBehaviour
     private int _crystalRandomFacttor = 0;//параметр нужный чтобы кристал генерировался каждый 
 
     #region Public Metods
+    public void GameOver()
+    {
+        //gameover
+        Debug.Log("Game over");
+        Time.timeScale = 0;
+    }
     public void CreateStartPlatform()// стартовое поле StartFieldSize х StartFieldSize CrystalPeriod раз
     {
         for(int i = 0; i < StartFieldSize; i++)
             for(int j = 0; j < StartFieldSize; j++)
-                SpawnTile(new Vector2Int(i, j));
+                SpawnTile(new Vector2Int(i, j), true);
 
         _currentTileEndPos.x = StartFieldSize - 1;
         _currentTileEndPos.z = StartFieldSize - 1;
@@ -114,7 +120,7 @@ public class GamemanagerBehaviour : MonoBehaviour
     {
         _character = Instantiate(Character, Map.transform).GetComponent<CharacterBehaviour>();
     }
-    public void SpawnTile(Vector2Int pos)
+    public void SpawnTile(Vector2Int pos, bool isStartPlatformTile = false)
     {
         GameObject disabledTile = null;
         foreach(var e in _tiles)
@@ -130,13 +136,19 @@ public class GamemanagerBehaviour : MonoBehaviour
         {
             disabledTile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
             disabledTile.SetActive(true);
-            RandomizeSpawnCrystalOnTile(disabledTile.GetComponent<TileBehaviour>());
+            if (isStartPlatformTile)
+                disabledTile.GetComponent<TileBehaviour>().SetCrystalActive(false);
+            else
+                RandomizeSpawnCrystalOnTile(disabledTile.GetComponent<TileBehaviour>());
         }
         else
         {
             var tile = Instantiate(Tile, Map.transform);
             tile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
-            RandomizeSpawnCrystalOnTile(tile.GetComponent<TileBehaviour>());
+            if (isStartPlatformTile)
+                tile.GetComponent<TileBehaviour>().SetCrystalActive(false);
+            else
+                RandomizeSpawnCrystalOnTile(tile.GetComponent<TileBehaviour>());
             _tiles.Add(tile);
         }
 
