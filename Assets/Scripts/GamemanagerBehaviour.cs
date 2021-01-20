@@ -43,9 +43,7 @@ public class GamemanagerBehaviour : MonoBehaviour
     [SerializeField]
     private CrystalGenerationRule crystalGenerationRule = CrystalGenerationRule.Random;
     [SerializeField]
-    private int CrystalPeriod = 5;//(Периодичность появления кристалов) ToDo: сделтаь чтобы поле появлялось в редакторе только при выборе crystalGenerationRule = CrystalGenerationRule.Period 
-    [SerializeField]
-    private int CristalSpawnСhance = 10;//(процент шанса появления кристала)  ToDo: сделтаь чтобы поле появлялось в редакторе только при выборе crystalGenerationRule = CrystalGenerationRule.Random 
+    private int CrystalPeriod = 5;
     [SerializeField]
     private GameObject Map;//Ссылка на ГО карты.
     [SerializeField]
@@ -57,7 +55,9 @@ public class GamemanagerBehaviour : MonoBehaviour
     private static List<GameObject> _tiles = new List<GameObject>();//массив всех тайлов в игре
     private CharacterBehaviour _character;
     private Vector3Int _currentTileEndPos = Vector3Int.zero;
-    private int _crystalRandomFacttor = 0;//параметр нужный чтобы кристал генерировался каждый 
+    private int _tileCounter = 0;//считаем тайлы по порядку от 1 до CrystalPeriod
+    private int _crystalSpawnIndex = 0;// индекс тайла на котором заспавнится следующий кристал (от 0 до CrystalPeriod)
+    private bool _crystalAlreadySpawn = false;
 
     #region Public Metods
     public void GameOver()
@@ -159,36 +159,45 @@ public class GamemanagerBehaviour : MonoBehaviour
     #region Private Metods
     private void RandomizeSpawnCrystalOnTile(TileBehaviour tile)
     {
-        switch (crystalGenerationRule)
+        bool activ = false;
+        if (!_crystalAlreadySpawn)
         {
-            case CrystalGenerationRule.Random:
+            if (_tileCounter == _crystalSpawnIndex)
+            {
+                activ = true;
+                _crystalAlreadySpawn = true;
+                //вычисляем следующий
+                switch (crystalGenerationRule)
                 {
-                    int rnd = Random.Range(0, 101);
-                    if (rnd <= CristalSpawnСhance)
-                        tile.SetCrystalActive(true);
-                    else
-                        tile.SetCrystalActive(false);
-                    break;
+                    case CrystalGenerationRule.Random: // случайным образом
+                        {
+                            _crystalSpawnIndex = Random.Range(0, CrystalPeriod + 1);
+                            break;
+                        }
+                    case CrystalGenerationRule.Period: //по порядку.То есть на первом блоке - 1 - ый тайл с кристаллом, на 2 - ом - 2 тайл и так далее до 5 - ого блока.Далее опять с 1 - ого по 5.
+                        {
+                            _crystalSpawnIndex++;
+                            if (_crystalSpawnIndex > CrystalPeriod)
+                                _crystalSpawnIndex = 0;
+                            break;
+                        }
+                    case CrystalGenerationRule.None:
+                        {
+                            break;
+                        }
                 }
-            case CrystalGenerationRule.Period:
-                {
-                    if (_crystalRandomFacttor == 0)
-                    {
-                        tile.SetCrystalActive(true);
-                        _crystalRandomFacttor = CrystalPeriod;
-                    }
-                    else
-                    {
-                        _crystalRandomFacttor--;
-                        tile.SetCrystalActive(false);
-                    }
-                    break;
-                }
-            case CrystalGenerationRule.None:
-                {
-                    break;
-                }
+                
+            }
         }
+
+        _tileCounter++;
+        if (_tileCounter > CrystalPeriod)
+        {
+            _crystalAlreadySpawn = false;
+            _tileCounter = 0;
+        }
+
+        tile.SetCrystalActive(activ);
     }
     private void DeactivFarTiles()
     {

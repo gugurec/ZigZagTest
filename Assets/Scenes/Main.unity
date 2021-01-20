@@ -291,8 +291,7 @@ MonoBehaviour:
   StartFieldSize: 3
   difficulty: 1
   crystalGenerationRule: 1
-  CrystalPeriod: 5
-  "CristalSpawn\u0421hance": 10
+  CrystalPeriod: 1
   Map: {fileID: 1757531508}
   Tile: {fileID: 9191418101572381911, guid: 167dfd4ebeff6124b8a2c5a12245d71f, type: 3}
   Character: {fileID: 2101706670198848614, guid: 7a20d400773aa234eae8ff73f5a4513d,
