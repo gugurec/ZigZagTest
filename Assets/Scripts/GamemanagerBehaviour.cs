@@ -15,14 +15,14 @@ public class GamemanagerBehaviour : MonoBehaviour
         }
     }
 
-    public static CrystalGenerationRule Rule
+    public static CrystalGenerationRule Rule // правила для генерации кристалов
     {
         get
         {
             return crystalGenerationRule;
         }
     }
-    public static int Period
+    public static int Period // периодичность появления кристалов
     {
         get
         {
@@ -30,7 +30,7 @@ public class GamemanagerBehaviour : MonoBehaviour
         }
     }
 
-    public static Difficulty GameDifficulty
+    public static Difficulty GameDifficulty // игровая сложность (влияет на ширину дорожки)
     {
         get
         {
@@ -52,9 +52,9 @@ public class GamemanagerBehaviour : MonoBehaviour
         Random = 1,
         Period = 2
     }
+    public delegate void ScoreChanged();
+    public event ScoreChanged OnScoreChanged;
 
-    [SerializeField]
-    private float Speed = 2.0f;
     [SerializeField]
     private static Difficulty _difficulty = Difficulty.Hard;
     [SerializeField]
@@ -66,54 +66,66 @@ public class GamemanagerBehaviour : MonoBehaviour
 
     private static GamemanagerBehaviour _instance;
     
-    private int _scoreCounter = 0;
+    private int _scoreCounter = 0; //текущие набранные очки
 
     #region Public Metods
     public void AddScore(int score)
     {
-        _scoreCounter += score;
-        MainHUDBehaviour.Instance.ShowScore(_scoreCounter);
+        SetCurrentScore(_scoreCounter += score);
     }
+
+    public int GetCurrentScore()
+    {
+        return _scoreCounter;
+    }
+
     public void GameOver()
     {
-        //gameover
-        Debug.Log("Game over");
         MainHUDBehaviour.Instance.ShowGameOverPanel();
         PauseGame();
     }
+
     public void InitGame()
     {
         _map.InitMap();
         MainHUDBehaviour.Instance.ShowStartPanel();
         PauseGame();
     }
+
     public void StartGame()
     {
-        Debug.Log("Game start");
         MainHUDBehaviour.Instance.ShowGamePanel();
         UnpauseGame();
     }
+
     public void PauseGame()
     {
         Time.timeScale = 0;
     }
+
     public void UnpauseGame()
     {
         Time.timeScale = 1;
     }
+
     public void RestartGame()
     {
-        Debug.Log("Restart");
+        _map.ClearMap();
+        _map.InitMap();
+        SetCurrentScore(0);
+        MainHUDBehaviour.Instance.ShowStartPanel();
     }
     #endregion
 
-    #region Private Metods
-    
-    #endregion
+    private void SetCurrentScore(int score)
+    {
+        _scoreCounter = score;
+        OnScoreChanged?.Invoke();
+    }
+
+
     void Start()
     {
         InitGame();
     }
-
-    
 }

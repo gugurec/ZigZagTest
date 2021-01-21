@@ -44,8 +44,18 @@ public class MainHUDBehaviour : MonoBehaviour
         _gamePanel.SetActive(true);
     }
 
-    public void ShowScore(int score)
+    public void UpdateScore()
     {
-        _scoreText.text = _scoreDescription + score.ToString();
+        _scoreText.text = _scoreDescription + GamemanagerBehaviour.Instance.GetCurrentScore().ToString();
+    }
+
+    private void OnEnable()
+    {
+        GamemanagerBehaviour.Instance.OnScoreChanged += UpdateScore;
+    }
+    private void OnDisable()
+    {
+        if(GamemanagerBehaviour.Instance)
+            GamemanagerBehaviour.Instance.OnScoreChanged -= UpdateScore;
     }
 }

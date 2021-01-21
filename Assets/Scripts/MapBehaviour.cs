@@ -15,13 +15,25 @@ public class MapBehaviour : MonoBehaviour
     [SerializeField]
     private int _startFieldSize = 3;
 
-    private static List<GameObject> _tiles = new List<GameObject>();//массив всех тайлов в игре
+    private List<GameObject> _tiles = new List<GameObject>();//массив всех тайлов в игре
     private CharacterBehaviour _character;//ссылка на текущего персонажа
     private Vector3Int _currentTileEndPos = Vector3Int.zero;//координата на которой закончился текущий спавн тайлов
     private int _tileCounter = 0;//считаем тайлы по порядку от 1 до CrystalPeriod
     private int _crystalSpawnIndex = 0;// индекс тайла на котором заспавнится следующий кристал (от 0 до CrystalPeriod)
     private bool _crystalAlreadySpawn = false;
 
+    public void ClearMap()
+    {
+        foreach (var e in _tiles)
+            Destroy(e);
+        _tiles.Clear();
+        Destroy(_character.gameObject);
+        _character = null;
+        _currentTileEndPos = Vector3Int.zero;
+        _tileCounter = 0;
+        _crystalSpawnIndex = 0;
+        _crystalAlreadySpawn = false;
+    }
 
     public void InitMap()
     {
@@ -30,7 +42,9 @@ public class MapBehaviour : MonoBehaviour
         for (; _character.GetCurrentMaxTileCoords() + DistanceTileGenerationForward > GetCurrentTileEndCoords();)
             CreateRandomTile();
     }
-    public void CreateStartPlatform(int startFieldSize)// генерим стартовое поле StartFieldSize х StartFieldSize
+
+    #region Private Metods
+    private void CreateStartPlatform(int startFieldSize)// генерим стартовое поле StartFieldSize х StartFieldSize
     {
         for (int i = 0; i < startFieldSize; i++)
             for (int j = 0; j < startFieldSize; j++)
@@ -39,7 +53,7 @@ public class MapBehaviour : MonoBehaviour
         _currentTileEndPos.x = startFieldSize - 1;
         _currentTileEndPos.z = startFieldSize - 1;
     }
-    public void CreateRandomTile()// генерим дорогу вправо или влево (ширина зависит от difficulty)
+    private void CreateRandomTile()// генерим дорогу вправо или влево (ширина зависит от difficulty)
     {
         int leftOrRight = Random.Range(0, 2);
         int XStartPos = 0;
@@ -80,11 +94,11 @@ public class MapBehaviour : MonoBehaviour
         _currentTileEndPos.x = tileSize + XStartPos - 1;
         _currentTileEndPos.z = tileSize + ZStartPos - 1;
     }
-    public void SpawnCharacter()//спавним персонажа
+    private void SpawnCharacter()//спавним персонажа
     {
         _character = Instantiate(Character, transform).GetComponent<CharacterBehaviour>();
     }
-    public void SpawnTile(Vector2Int pos, bool isStartPlatformTile = false)//спавним тайл в указанных кординатах (если isStartPlatformTile, то не спавним на нем кристал)
+    private void SpawnTile(Vector2Int pos, bool isStartPlatformTile = false)//спавним тайл в указанных кординатах (если isStartPlatformTile, то не спавним на нем кристал)
     {
         GameObject disabledTile = null;
         foreach (var e in _tiles)
@@ -178,6 +192,7 @@ public class MapBehaviour : MonoBehaviour
     {
         return Mathf.RoundToInt(Mathf.Max(tile.transform.position.x, tile.transform.position.z));
     }
+    #endregion
 
     void Update()
     {
