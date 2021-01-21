@@ -60,7 +60,7 @@ public class MapBehaviour : MonoBehaviour
         int ZStartPos = 0;
         int tileSize = 0;
 
-        switch (GamemanagerBehaviour.GameDifficulty)
+        switch (GamemanagerBehaviour.Instance.GameDifficulty)
         {
             case GamemanagerBehaviour.Difficulty.Easy:
                 tileSize = 3;
@@ -143,17 +143,17 @@ public class MapBehaviour : MonoBehaviour
                 activ = true;
                 _crystalAlreadySpawn = true;
                 //вычисляем следующий
-                switch (GamemanagerBehaviour.Rule)
+                switch (GamemanagerBehaviour.Instance.Rule)
                 {
                     case GamemanagerBehaviour.CrystalGenerationRule.Random: // случайным образом
                         {
-                            _crystalSpawnIndex = Random.Range(0, GamemanagerBehaviour.Period + 1);
+                            _crystalSpawnIndex = Random.Range(0, GamemanagerBehaviour.Instance.Period + 1);
                             break;
                         }
                     case GamemanagerBehaviour.CrystalGenerationRule.Period: //по порядку.То есть на первом блоке - 1 - ый тайл с кристаллом, на 2 - ом - 2 тайл и так далее до 5 - ого блока.Далее опять с 1 - ого по 5.
                         {
                             _crystalSpawnIndex++;
-                            if (_crystalSpawnIndex > GamemanagerBehaviour.Period)
+                            if (_crystalSpawnIndex > GamemanagerBehaviour.Instance.Period)
                                 _crystalSpawnIndex = 0;
                             break;
                         }
@@ -167,7 +167,7 @@ public class MapBehaviour : MonoBehaviour
         }
 
         _tileCounter++;
-        if (_tileCounter > GamemanagerBehaviour.Period)
+        if (_tileCounter > GamemanagerBehaviour.Instance.Period)
         {
             _crystalAlreadySpawn = false;
             _tileCounter = 0;

@@ -15,14 +15,14 @@ public class GamemanagerBehaviour : MonoBehaviour
         }
     }
 
-    public static CrystalGenerationRule Rule // правила для генерации кристалов
+    public CrystalGenerationRule Rule // правила для генерации кристалов
     {
         get
         {
             return crystalGenerationRule;
         }
     }
-    public static int Period // периодичность появления кристалов
+    public int Period // периодичность появления кристалов
     {
         get
         {
@@ -30,7 +30,7 @@ public class GamemanagerBehaviour : MonoBehaviour
         }
     }
 
-    public static Difficulty GameDifficulty // игровая сложность (влияет на ширину дорожки)
+    public Difficulty GameDifficulty // игровая сложность (влияет на ширину дорожки)
     {
         get
         {
@@ -56,11 +56,11 @@ public class GamemanagerBehaviour : MonoBehaviour
     public event ScoreChanged OnScoreChanged;
 
     [SerializeField]
-    private static Difficulty _difficulty = Difficulty.Hard;
+    private Difficulty _difficulty = Difficulty.Hard;
     [SerializeField]
-    private static CrystalGenerationRule crystalGenerationRule = CrystalGenerationRule.Random;
+    private CrystalGenerationRule crystalGenerationRule = CrystalGenerationRule.Random;
     [SerializeField]
-    private static int _crystalPeriod = 5;
+    private int _crystalPeriod = 5;
     [SerializeField]
     private MapBehaviour _map;//Ссылка на ГО карты.
 
