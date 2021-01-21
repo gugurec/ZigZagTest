@@ -181,7 +181,7 @@ public class MapBehaviour : MonoBehaviour
         {
             if (e.activeInHierarchy)
                 if (_character.GetCurrentMaxTileCoords() - GetTileCoords(e) > DistanceTileGenerationBack)
-                    e.SetActive(false);
+                    e.gameObject.GetComponent<TileBehaviour>().StartDeactivTile();
         }
     }
     private int GetCurrentTileEndCoords()

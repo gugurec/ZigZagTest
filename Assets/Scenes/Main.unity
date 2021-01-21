@@ -992,7 +992,7 @@ MonoBehaviour:
   Character: {fileID: 2101706670198848614, guid: 7a20d400773aa234eae8ff73f5a4513d,
     type: 3}
   DistanceTileGenerationForward: 10
-  DistanceTileGenerationBack: 3
+  DistanceTileGenerationBack: 1
   _startFieldSize: 3
 --- !u!4 &1757531510
 Transform:

@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 2881189918753669138}
   - component: {fileID: 6154576688320665614}
   - component: {fileID: 553679740284550284}
+  - component: {fileID: 5147965121812193465}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -226,6 +227,8 @@ MonoBehaviour:
   _crystal: {fileID: 6296031988184714828}
   _crystalCollider: {fileID: 6154576688320665614}
   _tileCollider: {fileID: 2881189918753669138}
+  _platformDestroyAnim: {fileID: 5147965121812193465}
+  _platform: {fileID: 4703758227090096239}
 --- !u!65 &2881189918753669138
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -268,3 +271,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!111 &5147965121812193465
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9191418101572381911}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: c100d117d8d80b044819d64596fa66b2, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: c100d117d8d80b044819d64596fa66b2, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
