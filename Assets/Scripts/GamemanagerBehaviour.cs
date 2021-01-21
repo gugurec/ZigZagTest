@@ -58,8 +58,14 @@ public class GamemanagerBehaviour : MonoBehaviour
     private int _tileCounter = 0;//считаем тайлы по порядку от 1 до CrystalPeriod
     private int _crystalSpawnIndex = 0;// индекс тайла на котором заспавнится следующий кристал (от 0 до CrystalPeriod)
     private bool _crystalAlreadySpawn = false;
+    private int _scoreCounter = 0;
 
     #region Public Metods
+    public void AddScore(int score)
+    {
+        _scoreCounter += score;
+        MainHUDBehaviour.Instance.ShowScore(_scoreCounter);
+    }
     public void GameOver()
     {
         //gameover

@@ -10,6 +10,9 @@ public class MainHUDBehaviour : MonoBehaviour
     private GameObject _gameOverPanel;
     [SerializeField]
     private GameObject _gamePanel;
+    [SerializeField]
+    private UnityEngine.UI.Text _scoreText;
+    private string _scoreDescription = "Score: ";
     public static MainHUDBehaviour Instance
     {
         get
@@ -39,5 +42,10 @@ public class MainHUDBehaviour : MonoBehaviour
         _startPanel.SetActive(false);
         _gameOverPanel.SetActive(false);
         _gamePanel.SetActive(true);
+    }
+
+    public void ShowScore(int score)
+    {
+        _scoreText.text = _scoreDescription + score.ToString();
     }
 }

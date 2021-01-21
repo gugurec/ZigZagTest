@@ -18,6 +18,7 @@ public class TileBehaviour : MonoBehaviour
     public void PickUpCrystal()
     {
         SetCrystalActive(false);
+        GamemanagerBehaviour.Instance.AddScore(1);
     }
     public bool isMyCrystalCollider(Collider collider)
     {
