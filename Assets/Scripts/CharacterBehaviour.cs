@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    private const float Speed = 2f;
-
+    [SerializeField]
+    private float Speed = 2f;
+    [SerializeField]
+    private Animation _fallAnim;
     private Vector3 _v = Vector3.zero;
-    private bool _isStartMove = true;
-
+    private bool _isMoving = true;
+    private bool _leftOrRight = true;
     public int GetCurrentMaxTileCoords()
     {
         if (transform.position.z > transform.position.x)
@@ -19,10 +21,13 @@ public class CharacterBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (_isStartMove)
+        if (Input.GetMouseButtonDown(0))
+            _leftOrRight = !_leftOrRight;
+
+        if (_isMoving)
         {
             _v = transform.position;
-            if (Input.GetMouseButton(0))
+            if (_leftOrRight)
                 _v.z = _v.z + Time.deltaTime * Speed;
             else
                 _v.x = _v.x + Time.deltaTime * Speed;
@@ -43,7 +48,12 @@ public class CharacterBehaviour : MonoBehaviour
         {
             RaycastHit info;
             if(!Physics.Raycast(new Ray(transform.position, Vector3.down), out info, 100))//коллайдера нет, шарик упал
+            {
+                _fallAnim.Play();
+                _isMoving = false;
                 GamemanagerBehaviour.Instance.GameOver();
+            }
+                
         }
     }
 }

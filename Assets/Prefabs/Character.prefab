@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c752e6f4e7c49145b69fbad5e8a3d68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selfCollider: {fileID: 1721978606690592706}
+  _fallAnim: {fileID: 5235104963280301926}
 --- !u!135 &1721978606690592706
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 6680404510316173566}
   - component: {fileID: 8280563843068651911}
   - component: {fileID: 1643062090494851467}
+  - component: {fileID: 5235104963280301926}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -239,3 +240,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!111 &5235104963280301926
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739014024154340678}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 530a9251ec50fc34d9873ed81c9269b2, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 530a9251ec50fc34d9873ed81c9269b2, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

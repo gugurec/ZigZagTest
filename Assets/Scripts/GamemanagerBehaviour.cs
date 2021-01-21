@@ -82,7 +82,6 @@ public class GamemanagerBehaviour : MonoBehaviour
     public void GameOver()
     {
         MainHUDBehaviour.Instance.ShowGameOverPanel();
-        PauseGame();
     }
 
     public void InitGame()
@@ -114,6 +113,7 @@ public class GamemanagerBehaviour : MonoBehaviour
         _map.InitMap();
         SetCurrentScore(0);
         MainHUDBehaviour.Instance.ShowStartPanel();
+        PauseGame();
     }
     #endregion
 
