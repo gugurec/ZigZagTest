@@ -64,7 +64,35 @@ public class GamemanagerBehaviour : MonoBehaviour
     {
         //gameover
         Debug.Log("Game over");
+        MainHUDBehaviour.Instance.ShowGameOverPanel();
+        PauseGame();
+    }
+    public void InitGame()
+    {
+        SpawnCharacter();
+        CreateStartPlatform();
+        for (; _character.GetCurrentMaxTileCoords() + DistanceTileGenerationForward > GetCurrentTileEndCoords();)
+            CreateRandomTile();
+        MainHUDBehaviour.Instance.ShowStartPanel();
+        PauseGame();
+    }
+    public void StartGame()
+    {
+        Debug.Log("Game start");
+        MainHUDBehaviour.Instance.ShowGamePanel();
+        UnpauseGame();
+    }
+    public void PauseGame()
+    {
         Time.timeScale = 0;
+    }
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1;
+    }
+    public void RestartGame()
+    {
+        Debug.Log("Restart");
     }
     public void CreateStartPlatform()// стартовое поле StartFieldSize х StartFieldSize CrystalPeriod раз
     {
@@ -219,10 +247,7 @@ public class GamemanagerBehaviour : MonoBehaviour
     #endregion
     void Start()
     {
-        SpawnCharacter();
-        CreateStartPlatform();
-        for(; _character.GetCurrentMaxTileCoords() + DistanceTileGenerationForward > GetCurrentTileEndCoords();)
-            CreateRandomTile();
+        InitGame();
     }
 
     void Update()
