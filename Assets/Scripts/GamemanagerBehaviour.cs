@@ -82,6 +82,7 @@ public class GamemanagerBehaviour : MonoBehaviour
     public void GameOver()
     {
         MainHUDBehaviour.Instance.ShowGameOverPanel();
+        DebugInfo();
     }
 
     public void InitGame()
@@ -127,5 +128,10 @@ public class GamemanagerBehaviour : MonoBehaviour
     void Start()
     {
         InitGame();
+    }
+    void DebugInfo()
+    {
+        foreach(var e in _map.GetComponentsInChildren<IStateInfo>())
+            Debug.Log(e.GetInfo());
     }
 }

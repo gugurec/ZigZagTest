@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileBehaviour : MonoBehaviour
+public class TileBehaviour : MonoBehaviour, IStateInfo
 {
     [SerializeField]
     private GameObject _crystal;
@@ -45,5 +45,16 @@ public class TileBehaviour : MonoBehaviour
     {
         _platform.transform.localScale = _scaleBuf;
         this.gameObject.SetActive(false);
+    }
+
+    public string GetInfo()
+    {
+        string s = "";
+        s = "Pos " +  transform.localPosition.x.ToString() + " " + transform.localPosition.y.ToString();
+        if (_crystal.activeInHierarchy)
+            s += " With crystal";
+        else
+            s += " Without crystal";
+        return s;
     }
 }

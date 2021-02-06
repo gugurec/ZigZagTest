@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterBehaviour : MonoBehaviour
+public class CharacterBehaviour : MonoBehaviour, IStateInfo
 {
     [SerializeField]
     private float Speed = 2f;
@@ -55,5 +55,10 @@ public class CharacterBehaviour : MonoBehaviour
             }
                 
         }
+    }
+
+    public string GetInfo()
+    {
+        return "Character Info";
     }
 }
