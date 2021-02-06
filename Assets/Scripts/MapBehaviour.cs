@@ -15,7 +15,7 @@ public class MapBehaviour : MonoBehaviour
     [SerializeField]
     private int _startFieldSize = 3;
 
-    private List<GameObject> _tiles = new List<GameObject>();//массив всех тайлов в игре
+    private TilePool _tilePool = new TilePool();
     private CharacterBehaviour _character;//ссылка на текущего персонажа
     private Vector3Int _currentTileEndPos = Vector3Int.zero;//координата на которой закончился текущий спавн тайлов
     private int _tileCounter = 0;//считаем тайлы по порядку от 1 до CrystalPeriod
@@ -24,9 +24,7 @@ public class MapBehaviour : MonoBehaviour
 
     public void ClearMap()
     {
-        foreach (var e in _tiles)
-            Destroy(e);
-        _tiles.Clear();
+        _tilePool.Clear();
         Destroy(_character.gameObject);
         _character = null;
         _currentTileEndPos = Vector3Int.zero;
@@ -37,6 +35,8 @@ public class MapBehaviour : MonoBehaviour
 
     public void InitMap()
     {
+        _tilePool.SetRootTransform(transform);
+        _tilePool.SetTile(Tile);
         SpawnCharacter();
         CreateStartPlatform(_startFieldSize);
         for (; _character.GetCurrentMaxTileCoords() + DistanceTileGenerationForward > GetCurrentTileEndCoords();)
@@ -100,35 +100,13 @@ public class MapBehaviour : MonoBehaviour
     }
     private void SpawnTile(Vector2Int pos, bool isStartPlatformTile = false)//спавним тайл в указанных кординатах (если isStartPlatformTile, то не спавним на нем кристал)
     {
-        GameObject disabledTile = null;
-        foreach (var e in _tiles)
-        {
-            if (!e.activeInHierarchy)
-            {
-                disabledTile = e;
-                break;
-            }
-        }
-
-        if (disabledTile != null)
-        {
-            disabledTile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
-            disabledTile.SetActive(true);
-            if (isStartPlatformTile)
-                disabledTile.GetComponent<TileBehaviour>().SetCrystalActive(false);
-            else
-                RandomizeSpawnCrystalOnTile(disabledTile.GetComponent<TileBehaviour>());
-        }
+        var tile = _tilePool.Take();
+        tile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
+        tile.SetActive(true);
+        if (isStartPlatformTile)
+            tile.GetComponent<TileBehaviour>().SetCrystalActive(false);
         else
-        {
-            var tile = Instantiate(Tile, transform);
-            tile.transform.localPosition = new Vector3(pos.x, 0, pos.y);
-            if (isStartPlatformTile)
-                tile.GetComponent<TileBehaviour>().SetCrystalActive(false);
-            else
-                RandomizeSpawnCrystalOnTile(tile.GetComponent<TileBehaviour>());
-            _tiles.Add(tile);
-        }
+            RandomizeSpawnCrystalOnTile(tile.GetComponent<TileBehaviour>());
 
         DeactivFarTiles();
     }
@@ -177,11 +155,10 @@ public class MapBehaviour : MonoBehaviour
     }
     private void DeactivFarTiles()
     {
-        foreach (var e in _tiles)
+        foreach (var e in _tilePool.GetActivTiles())
         {
-            if (e.activeInHierarchy)
-                if (_character.GetCurrentMaxTileCoords() - GetTileCoords(e) > DistanceTileGenerationBack)
-                    e.gameObject.GetComponent<TileBehaviour>().StartDeactivTile();
+            if (_character.GetCurrentMaxTileCoords() - GetTileCoords(e) > DistanceTileGenerationBack)
+                e.gameObject.GetComponent<TileBehaviour>().StartDeactivTile();
         }
     }
     private int GetCurrentTileEndCoords()
